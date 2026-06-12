@@ -1,0 +1,9 @@
+.github/
+.gitignore
+.env
+pkg/
+postgres-data/
+Dockerfile
+docker-compose.yml
+main_test.go
+main

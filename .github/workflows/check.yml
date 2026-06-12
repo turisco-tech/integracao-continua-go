@@ -1,0 +1,47 @@
+name: "Verificações de código"
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest`
+    
+    # 🌟 VARIÁVEIS GLOBAIS DO JOB 🌟
+    # Disponíveis para o Docker e para o Go automaticamente
+    env:
+      # Variáveis que a imagem oficial do Postgres exige
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: root
+      
+      # Variáveis que o seu teste em Go exige
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: root
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.22'
+
+    - name: Inicia banco
+      run: docker compose up -d postgres
+
+    - name: Lint
+      uses: golangci/golangci-lint-action@v6
+      with:
+        version: v1.59
+        args: controllers/ database/ models/ routes/
+
+    - name: Test
+      run: |
+        # Mantemos o sleep só por garantia de tempo de inicialização
+        sleep 10
+        go test -v main_test.go
