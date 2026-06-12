@@ -6,7 +6,7 @@ on:
 
 jobs:
   check:
-    runs-on: ubuntu-latest`
+    runs-on: ubuntu-latest
     
     # 🌟 VARIÁVEIS GLOBAIS DO JOB 🌟
     # Disponíveis para o Docker e para o Go automaticamente
